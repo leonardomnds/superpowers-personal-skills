@@ -15,12 +15,9 @@ Fornecer um espaço separado para skills adicionais, organizadas de forma simple
 
 ## Como usar
 
-1. Clone este repositório.  
-2. Adicione suas skills seguindo o padrão existente.  
-3. Importe no projeto principal conforme a convenção definida no *superpowers*.
+Clone este repositório para a pasta `~/.codex/skills`:
 
-## Contribuição
-
-- Pull requests são bem-vindos.  
-- Mantenha o formato das skills consistente.  
-- Evite acoplamento com outras skills.
+```bash
+cd ~/.codex/skills
+git clone https://github.com/obra/personal-skills.git .
+```
