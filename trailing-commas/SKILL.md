@@ -1,7 +1,7 @@
 ---
 name: trailing-commas
 description: Use when C# multi-line initializers, arrays, or parameter lists are missing trailing commas - enforces consistent comma usage to simplify diffs, reduce merge conflicts, and ease item insertion.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Trailing Commas
 

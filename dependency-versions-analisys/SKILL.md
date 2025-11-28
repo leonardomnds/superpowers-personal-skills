@@ -1,7 +1,7 @@
 ---
 name: dependency-versions-analysis
 description: Use when auditing or modifying project dependencies (frontend or backend) — analyzes declared and resolved versions, flags risky upgrades, and consults the project's MCP (Context7) documentation as the authoritative source for compatibility and recommended versions.
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Dependency Versions Analysis (libs)
 

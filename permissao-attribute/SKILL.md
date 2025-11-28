@@ -1,7 +1,7 @@
 ---
 name: permissao-attribute
 description: Use when creating or modifying C# Commands or Queries—enforces presence of PermissaoAttribute or SemPermissaoAttribute and ensures each assigned GUID is unique across the entire project when PermissaoAttribute is used.
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Permissao Attribute Enforcement
 

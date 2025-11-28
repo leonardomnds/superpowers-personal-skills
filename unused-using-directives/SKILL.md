@@ -1,7 +1,7 @@
 ---
 name: unused-using-directives
 description: Use when C# files contain unused using directives that generate noise, warnings, or unnecessary imports - documents how to detect, report and safely remove unused using blocks.
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Unused Using Directives
 
