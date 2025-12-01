@@ -1,6 +1,6 @@
 ---
 name: stylecopplus-max-method-length
-description: Use when repository config sets styleCopPlusRules.maxMethodLength - enforces maximum number of lines per method and suggests refactorings when exceeded.
+description: Always use this when repository config sets styleCopPlusRules.maxMethodLength - enforces maximum number of lines per method and suggests refactorings when exceeded.
 ---
 
 # StyleCopPlus — Max Method Length

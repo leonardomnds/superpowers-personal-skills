@@ -1,6 +1,6 @@
 ---
 name: global-usings-rule
-description: Use when adding new using directives to C# files—checks GlobalUsings.cs first to avoid redundant imports and centralize shared namespaces.
+description: Always use this when adding new using directives to C# files—checks GlobalUsings.cs first to avoid redundant imports and centralize shared namespaces.
 ---
 
 # Global Usings Rule

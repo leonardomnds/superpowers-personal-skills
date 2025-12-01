@@ -1,6 +1,6 @@
 ---
 name: enum-style
-description: Standard for creating or modifying enums
+description: Always use this standard for creating or modifying enums in .cs files.
 ---
 
 # Enum Style

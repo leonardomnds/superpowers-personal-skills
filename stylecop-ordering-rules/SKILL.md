@@ -1,6 +1,6 @@
 ---
 name: stylecop-ordering-rules
-description: Use when the repository sets usingDirectivesPlacement to outsideNamespace - enforces that all using directives appear before the namespace, groups System.* first, and normalizes grouping and alphabetical order.
+description: Always use this when the repository sets usingDirectivesPlacement to outsideNamespace - enforces that all using directives appear before the namespace, groups System.* first, and normalizes grouping and alphabetical order.
 ---
 
 # StyleCop Ordering Rules (project-configured)

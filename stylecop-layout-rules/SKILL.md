@@ -1,6 +1,6 @@
 ---
 name: stylecop-layout-rules
-description: Use when StyleCop layout rules are enabled — enforces newline-at-EOF policy, using-group layout, and do/while brace placement.
+description: Always use this when StyleCop layout rules are enabled in .NET projects — enforces newline-at-EOF policy, using-group layout, and do/while brace placement.
 ---
 
 # StyleCop Layout Rules

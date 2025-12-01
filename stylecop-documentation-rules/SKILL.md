@@ -1,6 +1,6 @@
 ---
 name: stylecop-documentation-rules
-description: Use when StyleCop documentation rules are enabled — enforces XML documentation, file headers, naming conventions and documentation culture.
+description: Always use this when StyleCop documentation rules are enabled in .NET projects — enforces XML documentation, file headers, naming conventions and documentation culture.
 ---
 
 # StyleCop Documentation Rules

@@ -1,6 +1,6 @@
 ---
 name: stylecopplus-max-line-length
-description: Use when repository config sets styleCopPlusRules.maxLineLength - enforces maximum line length (120) and provides wrapping guidance and tests.
+description: Always use this when repository config sets styleCopPlusRules.maxLineLength - enforces maximum line length (120) and provides wrapping guidance and tests.
 ---
 
 # StyleCopPlus — Max Line Length

@@ -1,6 +1,6 @@
 ---
 name: stylecop-readability-rules
-description: Use when StyleCop readability rules are enabled — enforces readability settings such as built-in type aliases and clarity preferences.
+description: Always use this when StyleCop readability rules are enabled — enforces readability settings such as built-in type aliases and clarity preferences.
 ---
 
 # StyleCop Readability Rules

@@ -1,6 +1,6 @@
 ---
 name: stylecopplus-max-file-length
-description: Use when repository config sets styleCopPlusRules.maxFileLength - enforces maximum file length (number of lines) and provides splitting/refactor guidance.
+description: Always use this when repository config sets styleCopPlusRules.maxFileLength - enforces maximum file length (number of lines) and provides splitting/refactor guidance.
 ---
 
 # StyleCopPlus — Max File Length

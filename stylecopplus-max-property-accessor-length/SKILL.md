@@ -1,6 +1,6 @@
 ---
 name: stylecopplus-max-property-accessor-length
-description: Use when repository config sets styleCopPlusRules.maxPropertyAccessorLength - limits length of property accessors (get/set bodies) to keep properties concise.
+description: Always use this when repository config sets styleCopPlusRules.maxPropertyAccessorLength - limits length of property accessors (get/set bodies) to keep properties concise.
 ---
 
 # StyleCopPlus — Max Property Accessor Length

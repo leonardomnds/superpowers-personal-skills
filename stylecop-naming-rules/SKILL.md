@@ -1,6 +1,6 @@
 ---
 name: stylecop-naming-rules
-description: Use when StyleCop naming rules are enabled — enforces tuple element casing, Hungarian prefix policy, and allowed namespace components.
+description: Always use this when StyleCop naming rules are enabled in .NET project — enforces tuple element casing, Hungarian prefix policy, and allowed namespace components.
 ---
 
 # StyleCop Naming Rules

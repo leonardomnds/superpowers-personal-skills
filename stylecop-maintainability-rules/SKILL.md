@@ -1,6 +1,6 @@
 ---
 name: stylecop-maintainability-rules
-description: Use when StyleCop maintainability rules are enabled — enforces allowed top-level type kinds according to project configuration.
+description: Always use this when StyleCop maintainability rules are enabled — enforces allowed top-level type kinds according to project configuration.
 ---
 
 # StyleCop Maintainability Rules

@@ -1,6 +1,6 @@
 ---
 name: stylecop-indentation
-description: Use when repository defines indentation settings in StyleCop schema - enforces indentationSize, tabSize and useTabs across C# source files.
+description: Always use this when repository defines indentation settings in StyleCop schema - enforces indentationSize, tabSize and useTabs across C# source files.
 ---
 
 # Indentation

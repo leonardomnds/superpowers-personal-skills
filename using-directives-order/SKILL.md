@@ -1,6 +1,6 @@
 ---
 name: using-directives-order
-description: Use when C# files contain unordered `using` directives at the top of the file - enforces and documents how to detect, report and automatically sort contiguous using blocks (treating global using / using static separately).
+description: Always use this when C# files contain unordered `using` directives at the top of the file - enforces and documents how to detect, report and automatically sort contiguous using blocks (treating global using / using static separately).
 ---
 
 # Using directives order

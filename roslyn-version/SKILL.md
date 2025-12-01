@@ -1,6 +1,6 @@
 ---
 name: roslyn-version
-description: Ignore NU1608 warnings during tests/build and never attempt automated fixes for them.
+description: Always ignore NU1608 warnings during tests/build and never attempt automated fixes for them, in .cs files.
 ---
 
 # Roslyn Version

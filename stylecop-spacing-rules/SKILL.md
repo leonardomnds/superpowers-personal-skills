@@ -1,6 +1,6 @@
 ---
 name: stylecop-spacing-rules
-description: Use when StyleCop spacing rules are enabled — enforces spacing around operators, commas, and parentheses according to project policy.
+description: Always use this when StyleCop spacing rules are enabled — enforces spacing around operators, commas, and parentheses according to project policy.
 ---
 
 # StyleCop Spacing Rules
