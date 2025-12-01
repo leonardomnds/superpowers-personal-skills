@@ -7,6 +7,8 @@ description: Always use this when adding new using directives to C# files—chec
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill global-usings-rule` e mantenha esta skill carregada enquanto edita.
+
 Skill para evitar adicionar `using` redundante quando já existe `global using` no projeto. Mantém arquivos limpos e concentra imports compartilhados.
 
 **REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill.

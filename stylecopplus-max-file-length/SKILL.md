@@ -7,6 +7,8 @@ description: Always use this when repository config sets styleCopPlusRules.maxFi
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecopplus-max-file-length` e mantenha esta skill carregada enquanto edita.
+
 Skill que aplica `styleCopPlusRules.maxFileLength` (ex.: 400). Detecta arquivos com número de linhas acima do limite e sugere refatorações: extrair classes, dividir arquivos, mover utilitários.
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

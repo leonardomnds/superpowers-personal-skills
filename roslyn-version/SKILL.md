@@ -7,6 +7,8 @@ description: Always ignore NU1608 warnings during tests/build and never attempt 
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill roslyn-version` e mantenha esta skill carregada enquanto edita.
+
 Guideline for handling Roslyn-related package restores: NU1608 (dependency downgrade) must be ignored; do not attempt to "fix" it during builds or test runs.
 
 ## When to Use

@@ -7,6 +7,8 @@ description: Always use this when StyleCop spacing rules are enabled — enforce
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecop-spacing-rules` e mantenha esta skill carregada enquanto edita.
+
 Aplica regras de espaçamento (série SA1000+) conforme definido no StyleCop. Garante consistência em operadores, vírgulas, parênteses e separadores.
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

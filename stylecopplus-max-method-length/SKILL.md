@@ -7,6 +7,8 @@ description: Always use this when repository config sets styleCopPlusRules.maxMe
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecopplus-max-method-length` e mantenha esta skill carregada enquanto edita.
+
 Skill que aplica `styleCopPlusRules.maxMethodLength` (ex.: 50). Detecta métodos com corpo maior que o limite e sugere decomposição, extração de responsabilidades e testes específicos.
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

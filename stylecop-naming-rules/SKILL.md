@@ -7,6 +7,8 @@ description: Always use this when StyleCop naming rules are enabled in .NET proj
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecop-naming-rules` e mantenha esta skill carregada enquanto edita.
+
 Aplica as regras de nomenclatura definidas em `namingRules` no StyleCop: casing de elementos de tupla, prefixos permitidos e validação de componentes de namespace.
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

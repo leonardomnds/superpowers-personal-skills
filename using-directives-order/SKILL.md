@@ -7,6 +7,8 @@ description: Always use this when C# files contain unordered `using` directives 
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill using-directives-order` e mantenha esta skill carregada enquanto edita.
+
 Skill para detectar e corrigir diretivas `using` fora de ordem em arquivos C#. Fornece a regra mínima, exemplos e contra-argumentos para evitar racionalizações durante a aplicação automática.
 
 **REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill.

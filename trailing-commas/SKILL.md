@@ -7,6 +7,8 @@ description: Always use this when C# multi-line initializers, arrays, or paramet
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill trailing-commas` e mantenha esta skill carregada enquanto edita.
+
 Skill para garantir que inicializadores, arrays e listas de parâmetros multilinha usem vírgula final. Isso simplifica manutenção, reduz conflitos e deixa diffs mais limpos.
 
 **REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill.

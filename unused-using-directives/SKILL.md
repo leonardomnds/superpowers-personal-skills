@@ -7,6 +7,8 @@ description: Always use this when C# files contain unused using directives that 
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill unused-using-directives` e mantenha esta skill carregada enquanto edita.
+
 Skill para detectar e remover diretivas `using` que não são usadas em arquivos C#. Reduz ruído, evita warnings e mantém o topo dos arquivos limpo.
 
 **REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill.

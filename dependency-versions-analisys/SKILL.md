@@ -7,6 +7,8 @@ description: Always use this when auditing or modifying project dependencies (fr
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill dependency-versions-analysis` e mantenha esta skill carregada enquanto edita.
+
 Skill para auditar e analisar versões de bibliotecas usadas em um repositório (frontend ou backend). O agente deve identificar versões declaradas e resolvidas, detectar problemas (versões obsoletas, vulnerabilidades conhecidas, quebras de compatibilidade sem migração) e **consultar sempre a documentação oficial via MCP do Context7** como fonte primária de recomendação e compatibilidade.
 
 **REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill. You MUST have access to the project MCP for Context7 (local cache, repository-hosted MCP files, or MCP endpoint) when running analyses.

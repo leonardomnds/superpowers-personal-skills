@@ -7,6 +7,8 @@ description: Always use this when repository config sets styleCopPlusRules.maxLi
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecopplus-max-line-length` e mantenha esta skill carregada enquanto edita.
+
 Skill que aplica a política `styleCopPlusRules.maxLineLength` (ex.: 120). Detecta linhas > limite e sugere/realiza quebras consistentes preservando semântica e indentação.
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

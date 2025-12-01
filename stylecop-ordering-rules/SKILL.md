@@ -6,6 +6,8 @@ description: Always use this when the repository sets usingDirectivesPlacement t
 # StyleCop Ordering Rules (project-configured)
 
 ## Overview
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecop-ordering-rules` e mantenha esta skill carregada enquanto edita.
+
 Applies ordering rules based on the StyleCop schema, customized for this project where:
 
 `usingDirectivesPlacement = "outsideNamespace"`

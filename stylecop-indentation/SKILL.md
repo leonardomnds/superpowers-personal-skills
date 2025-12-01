@@ -7,6 +7,8 @@ description: Always use this when repository defines indentation settings in Sty
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecop-indentation` e mantenha esta skill carregada enquanto edita.
+
 Enforce consistent indentation according to project StyleCop settings (`indentationSize`, `tabSize`, `useTabs`).
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

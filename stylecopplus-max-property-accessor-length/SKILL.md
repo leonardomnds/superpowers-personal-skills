@@ -7,6 +7,8 @@ description: Always use this when repository config sets styleCopPlusRules.maxPr
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecopplus-max-property-accessor-length` e mantenha esta skill carregada enquanto edita.
+
 Skill que aplica `styleCopPlusRules.maxPropertyAccessorLength` (ex.: 40). Garante que os blocos `get`/`set` permaneçam curtos; quando maiores, sugere extrair lógica para métodos auxiliares.
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

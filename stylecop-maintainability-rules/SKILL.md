@@ -7,6 +7,8 @@ description: Always use this when StyleCop maintainability rules are enabled —
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecop-maintainability-rules` e mantenha esta skill carregada enquanto edita.
+
 Aplica as regras de manutenibilidade definidas em `maintainabilityRules`, especialmente o conjunto permitido de tipos top-level (class, struct, interface, enum, delegate).
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

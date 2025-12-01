@@ -7,6 +7,8 @@ description: Always use this when StyleCop documentation rules are enabled in .N
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecop-documentation-rules` e mantenha esta skill carregada enquanto edita.
+
 Aplica regras de documentação definidas em `documentationRules`: necessidade de XML docs, cabeçalhos padrão, cultura de documentação, convenções de nome de arquivo e exceções de pontuação.
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

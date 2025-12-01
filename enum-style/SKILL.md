@@ -7,6 +7,8 @@ description: Always use this standard for creating or modifying enums in .cs fil
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill enum-style` e mantenha esta skill carregada enquanto edita.
+
 Padrão para criação e evolução de enums: cada membro deve ter valor explícito iniciando em 0; membros existentes nunca são renumerados ou removidos para evitar breaking changes.
 
 ## When to Use

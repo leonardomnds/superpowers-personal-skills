@@ -7,6 +7,8 @@ description: Always use this when StyleCop readability rules are enabled — enf
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecop-readability-rules` e mantenha esta skill carregada enquanto edita.
+
 Aplica regras de legibilidade definidas pelo StyleCop, incluindo uso (ou não) de aliases de tipos embutidos como `int`, `string`, `bool`.
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

@@ -7,6 +7,8 @@ description: Always use this when creating or modifying C# Commands or Queries�
 
 ## Overview
 
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill permissao-attribute` e mantenha esta skill carregada enquanto edita.
+
 Skill para garantir que **todas as Commands e Queries** possuam **ou** `PermissaoAttribute` **ou** `SemPermissaoAttribute` (quando estes atributos existem no projeto). Quando gerar novo código, **use sempre `PermissaoAttribute`**. Além disso, quando `PermissaoAttribute` for usado, o GUID associado **deve ser único** em toda a solução.
 
 **REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill.

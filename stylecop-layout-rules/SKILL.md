@@ -6,6 +6,8 @@ description: Always use this when StyleCop layout rules are enabled in .NET proj
 # StyleCop Layout Rules
 
 ## Overview
+**Uso obrigatório ao criar/editar arquivos:** antes de iniciar qualquer alteração, execute `~/.codex/superpowers/.codex/superpowers-codex use-skill stylecop-layout-rules` e mantenha esta skill carregada enquanto edita.
+
 Aplica regras de layout baseadas no StyleCop e na política específica do projeto.
 A regra principal local aqui é:
 
