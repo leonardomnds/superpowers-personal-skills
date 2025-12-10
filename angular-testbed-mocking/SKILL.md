@@ -1,0 +1,130 @@
+---
+name: angular-testbed-mocking
+description: Use when Angular specs silence template errors with NO_ERRORS_SCHEMA/CUSTOM_ELEMENTS_SCHEMA, patch services directly, or skip TestingModule/ng-mocks - enforces disciplined TestBed imports, MockProvider usage, typed jasmine fallbacks, and TestingUtils-driven wiring so DI stays deterministic
+---
+
+# Angular TestBed Mocking
+
+## Overview
+Lock every Angular spec to the TestBed so dependencies, modules, and DOM collaborators are declared once, mocked deterministically, and injected the same way production code sees them. No ad-hoc property patching, no implicit schemas, no leaky singletons.
+
+## When to Use
+- Component/service/directive specs that import Angular modules, Material/CDK elements, or inject framework services.
+- Any time `NullInjectorError`, `NG0303`, `NG0304`, or template warnings about unknown elements pop up—check whether importing `TestingModule` (or the real feature module) fixes it instead of adding schemas.
+- Teams tempted to `component.fooService = fake`, use untyped `jasmine.createSpyObj`, or drop `NO_ERRORS_SCHEMA`/`CUSTOM_ELEMENTS_SCHEMA`.
+- Skip for plain TypeScript utilities that can be tested without Angular.
+
+## Core Pattern
+1. **Map collaborators and warnings.** List modules, declarations, providers, and DOM elements the SUT touches, plus any template warnings. Include Angular Material/CDK modules, RouterTestingModule, HttpClientTestingModule, TranslateModule, etc.
+2. **Import real modules before mocking.** Try `TestingModule`, `ListagemTestingModule`, or the actual feature module and confirm warnings disappear. Only reach for `MockComponent`/`MockDirective` if importing the module is impossible or wasteful—never fix warnings with schemas.
+3. **Centralize TestBed config.** Wrap defaults in `createTestingModule(overrides?: Partial<TestModuleMetadata>)` and expose helpers via `TestingUtils` so specs share the same imports/providers and overrides stay explicit.
+4. **Mock declarations with ng-mocks.** Use `MockComponent`, `MockDirective`, `MockPipe`, `MockComponents`, etc., to satisfy template dependencies while keeping declarations deterministic and harness-friendly.
+5. **Mock services via providers, not properties.** Prefer `MockProvider`/`MockProviders` so DI and lifecycle hooks see the same stub. When ng-mocks cannot wrap `signal`-based services yet, fall back to `jasmine.createSpyObj<MyService>('MyService', ['method'])` and register it through `providers`.
+6. **Type every jasmine spy.** Always call `jasmine.createSpyObj<Type>` or `const spy: jasmine.SpyObj<Type> = jasmine.createSpyObj<Type>(...)` so TypeScript catches missing methods.
+7. **Use TestingUtils for interaction/injection.** Access services through `TestingUtils.inject`, trigger DOM events with `TestingUtils.click`, replace router directives via `TestingUtils.replaceImport`, and reuse modal/select helpers instead of ad-hoc helpers.
+8. **Compile once per describe.** Use `beforeEach(async () => { await configure(); fixture = TestBed.createComponent(...); fixture.detectChanges(); })`. Let Angular's automatic teardown run, calling `TestBed.resetTestingModule()` only when you mutate global providers.
+
+## Implementation Example
+```ts
+// billing-summary.component.spec.ts
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockComponent, MockProvider } from 'ng-mocks';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { TestingModule, TestingUtils } from '@testing/index';
+import { BillingSummaryComponent } from './billing-summary.component';
+import { BillingSummaryCardComponent } from '../ui/billing-summary-card.component';
+import { BillingService } from '../data/billing.service';
+
+const initialState = { invoices: { summary: null } };
+
+describe('BillingSummaryComponent', () => {
+  let fixture: ComponentFixture<BillingSummaryComponent>;
+  let service: jasmine.SpyObj<BillingService>;
+  let httpMock: HttpTestingController;
+  let store: MockStore;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TestingModule, // brings shared pipes/components
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      declarations: [
+        BillingSummaryComponent,
+        MockComponent(BillingSummaryCardComponent)
+      ],
+      providers: [
+        provideMockStore({ initialState }),
+        MockProvider(BillingService, jasmine.createSpyObj<BillingService>('BillingService', ['loadSummary']))
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(BillingSummaryComponent);
+    service = TestBed.inject(BillingService) as jasmine.SpyObj<BillingService>;
+    httpMock = TestBed.inject(HttpTestingController);
+    store = TestBed.inject(MockStore);
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+  it('loads summary once OnInit and reacts to retry click', () => {
+    expect(service.loadSummary).toHaveBeenCalledTimes(1);
+    const retryBtn = TestingUtils.getElementByCssName(fixture, '[data-test="retry"]');
+    TestingUtils.click(retryBtn);
+    expect(service.loadSummary).toHaveBeenCalledTimes(2);
+  });
+});
+
+// Signal-based service fallback
+const metricsSpy = jasmine.createSpyObj<SignalBasedService>('SignalBasedService', ['update']);
+TestBed.overrideProvider(SignalBasedService, { useValue: metricsSpy });
+```
+
+## Quick Reference
+| Need | Action |
+| --- | --- |
+| Unknown element/attribute warnings | Import the real module (Material/CDK, feature modules, or shared `TestingModule`) before considering mocks—never silence with schemas. |
+| Template-only collaborators | Declare `MockComponent/MockDirective/MockPipe` from `ng-mocks` so the DOM stays deterministic without pulling the full module. |
+| Services | Prefer `MockProvider`/`MockProviders`. If ng-mocks fails due to `signal`, register `jasmine.createSpyObj<Service>` via `providers`. |
+| HTTP collaborators | Import `HttpClientTestingModule`, grab `HttpTestingController`, `verify()` in `afterEach`. |
+| Router links/Navigation | Use `RouterTestingModule.withRoutes([])` or `RouterTestingHarness`, or replace directives via `TestingUtils.replaceImport`. |
+| TestingUtils helpers | Rely on `TestingUtils.inject`, `TestingUtils.click`, `TestingUtils.mockSelectProviders`, etc., instead of ad-hoc helpers. |
+
+## Pressure Test (Scenario Verification)
+- Scenario: 200-line Angular component using MatDialog + HttpClient + custom directives. Release train leaves in 20 minutes; PM wants "just spy on the service", "drop schemas to ignore Material warnings", and "skip TestingUtils to save time".
+- Without skill: `NO_ERRORS_SCHEMA` hides template failures, service is patched directly on the component, ng-mocks is skipped, and untyped spies miss methods—tests become flaky when DI order changes.
+- With this skill: collaborator map surfaces MatDialogModule/HttpClientTestingModule + shared `TestingModule`, declarations rely on `MockComponent`, services come from `MockProvider` (typed), TestingUtils drives clicks/injections, and the MatDialog harness verifies behavior deterministically. PM pressure is answered with imports + provider overrides instead of ad-hoc patches.
+
+## Rationalization Table
+| Excuse | Reality |
+| --- | --- |
+| "It's faster to set `component.billingService = fake` after `createComponent`." | That bypasses DI, so lifecycle hooks still use the real instance. Register fakes in `providers` or `overrideProvider`. |
+| "`NO_ERRORS_SCHEMA`/`CUSTOM_ELEMENTS_SCHEMA` cleans up template noise." | They hide missing imports entirely. Import the module (or `TestingModule`) or use `MockComponent` so warnings surface during regressions. |
+| "MockProvider can't handle this signal service, so I'll keep the real one." | Register a typed `jasmine.createSpyObj<SignalService>` via `providers`. The fallback stays deterministic and documents the one-off limitation. |
+| "Untyped `jasmine.createSpyObj` is fine; TypeScript will catch it later." | Untyped spies silently drop methods and return types. Always use the generic signature so the compiler enforces contract drift. |
+| "TestingUtils is optional; direct DOM querying is faster." | TestingUtils centralizes common patterns (clicks, modal refs, inject). Skipping it recreates brittle helpers and diverges from shared utilities. |
+
+## Red Flags — Stop and Re-align
+- Assigning spies directly onto component/service properties.
+- Adding `schemas: [NO_ERRORS_SCHEMA|CUSTOM_ELEMENTS_SCHEMA]` just to silence errors.
+- Instantiating Angular services with `new` inside tests.
+- Calling `TestBed.inject` after `fixture.detectChanges()` revealed a failure you are trying to mask.
+- Using shared mutable singletons (e.g., `const fakeService = ...; providers: [{provide, useValue: fakeService}]` reused across tests) without resetting spies.
+- Reaching for manual mocks before checking whether importing `TestingModule` (or the real feature module) removes the warning.
+- Creating `jasmine.createSpyObj` without `<Type>` generics or method lists.
+
+## Common Mistakes
+- Forgetting to reinitialize spy return values between tests → wrap stub creation in factories inside `beforeEach`.
+- Importing entire `AppModule` to satisfy dependencies → start with `TestingModule` or feature modules plus targeted `MockComponent` declarations.
+- Overriding provider after `compileComponents` without `TestBed.resetTestingModule()` → order-sensitive leakage. Configure before compilation.
+- Mixing manual zone flushing with harness utilities → prefer `fixture.whenStable()` or harness `forceStabilize`.
+- Ignoring `TestingUtils` helpers → duplicate modal/select stubs drift from the canonical implementations and miss future fixes.
+
+## Deployment Notes
+Add this skill to your personal git repo (dotfiles or knowledge base) and share via PR if others face the same TestBed anti-patterns. Reference it in project CLAUDE.md so future agents load it before touching Angular specs.
