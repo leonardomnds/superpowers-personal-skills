@@ -1,5 +1,7 @@
+---
 name: permissao-compliance
 description: Use when editing or creating MediatR requests (IBaseRequest) in .NET projects that define PermissaoAttribute/SemPermissaoAttribute—keeps every request decorated (prefer Permissao), ensures GUIDs are valid/uppercase/unique, and mirrors the checks enforced by PermissaoTests without rerunning it.
+---
 
 # Permissao Compliance Ritual
 

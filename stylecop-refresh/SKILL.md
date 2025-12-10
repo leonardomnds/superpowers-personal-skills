@@ -1,5 +1,7 @@
+---
 name: stylecop-refresh
 description: Use when about to editing or creating .NET source, build, or test files and feel tempted to rely on memory for StyleCop/editorconfig/Directory.Build.props rules instead of rereading them—forces a pre-writing refresher ritual so formatting, ordering, and analyzer settings stay compliant even under time pressure.
+---
 
 # StyleCop Refresh Ritual
 
