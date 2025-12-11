@@ -25,6 +25,7 @@ Every HttpClient call in the frontend must exchange typed DTOs/Queries that live
 7. **Responses coming through `BaseUrlInterceptor`** must type the HttpClient call as `ApiResponse<TDto>`; paginated endpoints wrap with `ApiResponse<ListaPaginada<TDto>>`.
 8. **GraphQL responses** use the `QueryGql<Recurso>Dto` pattern and live in `query-gql-<recurso>.dto.ts`; keep reusing existing DTOs for nested pieces.
 9. **No inline payloads** inside components/services; import from the DTO/Query file instead.
+10. **Nunca use DTO/Query legado como molde**—sempre derive nome e arquivo a partir do endpoint (verbo + recurso + qualificador) mesmo que haja arquivos fora do padrão no projeto.
 
 ## Quick Reference
 | Artifact | Purpose | Naming | File |
@@ -52,12 +53,14 @@ Place these files next to the feature’s data service (e.g., `src/app/data/oper
 | “Payload is UI-specific.” | If it crosses HttpClient, backend depends on it—name it after the API resource, not the component. |
 | “Queries are overkill for two params.” | Query classes document pagination defaults and keep interceptors type-safe. |
 | “I’ll refactor after we ship.” | You never do. Reviewers block merges once payloads are inline; do it right now. |
+| “Vou copiar o nome/arquivo legado para manter igual.” | Legados podem estar fora do padrão; derive sempre do endpoint e siga esta skill para convergirmos. |
 
 ## Red Flags – Stop and Fix
 - You can’t point to the DTO file for a request you are editing.
 - A service defines `interface Payload` or `const body = { ... }` right above `http.post`.
 - Query params are plain objects or `HttpParams` built inline.
 - File name lacks verb prefix or `Dto` suffix.
+- Você está reutilizando nome/arquivo legado fora do padrão em vez de seguir verbo + recurso + qualificador desta skill.
 
 ## Example
 `post-adicionar-servico-cobrado-ordem-servico.dto.ts`

@@ -24,6 +24,7 @@ DTO enums are shared contracts: they must live next to the DTOs, expose numeric 
 6. **Re-export**: add the enum file to `dto/index.ts` so consumers import from `@data/.../dto`.
 7. **Usage**: DTO interfaces reference the enum type; UI imports description/options helpers instead of retyping strings.
 8. **Updates**: when backend adds a new value, add it to enum + description + options in the same commit; failing to update any part is a blocking error.
+9. **Não use enum legado como molde**: derive nome/arquivo pelo recurso + contexto seguindo esta skill, mesmo que haja arquivos fora do padrão no projeto.
 
 ## Quick Reference
 | Concern | Rule | Example |
@@ -84,6 +85,7 @@ export const bloqueioPorInadimplenciaStatusOptions = Object
 | Dropdown hardcodes `{ label: 'Ativo', value: 0 }` | Import `<enum>Options` constant instead. |
 | Enum not exported from `index.ts` | Update `dto/index.ts` to re-export; otherwise consumers use long relative paths. |
 | Added enum member but forgot options | PR should fail—update enum, description, options together. |
+| Copiou nome/arquivo legado fora do padrão | Renomeie seguindo verbo/recurso/contexto e atualize index/exportações conforme esta skill. |
 
 ## Verification
 - Search for string literals referencing the enum values in the feature; replace with the enum/description/options exports.

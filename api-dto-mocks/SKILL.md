@@ -25,6 +25,7 @@ Every DTO that crosses HttpClient should have a matching mock generator so specs
 7. **Keep optional fields optional**: omit when not mandatory or randomize presence using ternaries.
 8. **Provide arrays/lists** by mapping the generator (e.g., `Array.from({length: 3}, generate...)`).
 9. **For API responses** wrap with `generateApiResponse(generator())` helper if available, otherwise build the `ApiResponse<T>` shape manually.
+10. **Não copie mocks legados fora do padrão**: derive nome/arquivo e assinaturas a partir do DTO e desta skill, mesmo que existam mocks antigos com convenções diferentes.
 
 ## Quick Reference
 | Task | Rule | Example |
@@ -128,6 +129,7 @@ export const generateGetResponseHistoricoOrdemServicoDto = (
 - **Rebuilding nested objects**: call `generateOrdemServicoDescontoRequest()` instead of duplicating its shape.
 - **Not exporting from `index.ts`**, forcing long relative imports.
 - **Using faker incorrectly** (e.g., `faker.random.number` deprecated). Prefer `faker.number.*` / `faker.helpers`.
+- **Reusando nome/arquivo legado fora do padrão**: renomeie o mock para `<dto>.mock.ts` e exporte `generate<DtoName>` conforme esta skill.
 
 ## Verification
 Before finishing:
