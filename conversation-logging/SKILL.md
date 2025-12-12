@@ -1,5 +1,7 @@
+---
 name: conversation-logging
 description: Use when running Claude/Superpowers chats that could lose state or need to resume later – enforces per-turn logging into docs/conversations/chat-XXXXXX.md files with padded numbering, new-file-by-default behavior, and explicit continuation rules when asked to keep a specific chat number.
+---
 
 # Conversation Logging
 
