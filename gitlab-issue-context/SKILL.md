@@ -1,5 +1,7 @@
+---
 name: gitlab-issue-context
 description: Use when you need GitLab issue context from a URL on a self-hosted instance - loads host/token from a local .env, validates the URL matches that host, hits the issues API, and emits Markdown with title and description
+---
 
 # GitLab Issue Context
 
