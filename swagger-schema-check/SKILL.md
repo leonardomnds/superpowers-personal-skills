@@ -22,6 +22,10 @@ Skip only when working exclusively with GraphQL or pure front-end logic.
    ```
    - Tries `http://localhost:5000/swagger` first.
    - Falls back to `BASE_URL` from `src/environments/environment.ts` (if present) + `/swagger`.
+   - Alternatively, pass a base URL override (no trailing slash) to skip detection:
+     ```
+     ./swagger-schema-check/fetch-swagger.sh https://api.dev.eugestor.insidesistemas.com.br
+     ```
    - Saves to `docs/swagger/openapi.json` (relative to current working directory), overwriting if it exists.
 2. **Inspect the endpoint you’re touching.**
    ```bash
@@ -34,7 +38,7 @@ Skip only when working exclusively with GraphQL or pure front-end logic.
 4. **Repeat whenever backend changes.** Don’t reuse stale snapshots.
 
 ## Quick Reference
-- Fetch: `./swagger-schema-check/fetch-swagger.sh`
+- Fetch: `./swagger-schema-check/fetch-swagger.sh` (or `./swagger-schema-check/fetch-swagger.sh https://api.dev.eugestor.insidesistemas.com.br`)
 - Local first: `http://localhost:5000/swagger`
 - Fallback: `BASE_URL` from `src/environments/environment.ts` + `/swagger`
 - Output: `docs/swagger/openapi.json` (overwrites)

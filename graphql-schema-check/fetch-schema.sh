@@ -4,25 +4,33 @@ set -euo pipefail
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Using graphql-schema-check skill."
-echo "Probing local GraphQL at http://localhost:5000/graphql..."
 
-ENDPOINT=""
-if curl -fsS "http://localhost:5000/graphql" >/dev/null 2>&1; then
-  ENDPOINT="http://localhost:5000/graphql"
-  echo "Local GraphQL detected at ${ENDPOINT}"
+explicit_base="${1:-}"
+
+if [[ -n "${explicit_base}" ]]; then
+  explicit_base="${explicit_base%/}"
+  ENDPOINT="${explicit_base%/}/graphql"
+  echo "Using explicit GraphQL endpoint: ${ENDPOINT}"
 else
-  echo "Local GraphQL not available. Trying BASE_URL from src/environments/environment.ts..."
-  if [[ -f "src/environments/environment.ts" ]]; then
-    BASE_URL="$(rg "const BASE_URL" -n src/environments/environment.ts | sed -E "s/.*'(.+)'/\\1/" | head -n1 || true)"
+  echo "Probing local GraphQL at http://localhost:5000/graphql..."
+  ENDPOINT=""
+  if curl -fsS "http://localhost:5000/graphql" >/dev/null 2>&1; then
+    ENDPOINT="http://localhost:5000/graphql"
+    echo "Local GraphQL detected at ${ENDPOINT}"
   else
-    BASE_URL=""
-  fi
-  if [[ -n "${BASE_URL}" ]]; then
-    ENDPOINT="${BASE_URL%/}/graphql"
-    echo "Using fallback GraphQL endpoint ${ENDPOINT}"
-  else
-    echo "Could not determine GraphQL endpoint (no local and no BASE_URL in src/environments/environment.ts)" >&2
-    exit 1
+    echo "Local GraphQL not available. Trying BASE_URL from src/environments/environment.ts..."
+    if [[ -f "src/environments/environment.ts" ]]; then
+      BASE_URL="$(rg "const BASE_URL" -n src/environments/environment.ts | sed -E "s/.*'(.+)'/\\1/" | head -n1 || true)"
+    else
+      BASE_URL=""
+    fi
+    if [[ -n "${BASE_URL}" ]]; then
+      ENDPOINT="${BASE_URL%/}/graphql"
+      echo "Using fallback GraphQL endpoint ${ENDPOINT}"
+    else
+      echo "Could not determine GraphQL endpoint (no local and no BASE_URL in src/environments/environment.ts). Provide a base URL as an argument if needed." >&2
+      exit 1
+    fi
   fi
 fi
 
