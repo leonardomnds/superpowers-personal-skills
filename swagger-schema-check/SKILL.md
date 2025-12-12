@@ -16,58 +16,37 @@ Before editing any REST integration, load the real Swagger/OpenAPI document. Pro
 Skip only when working exclusively with GraphQL or pure front-end logic.
 
 ## Core Pattern
-1. **Ping local swagger first.**
+1. **Use the helper script.**
    ```bash
-   LOCAL_SWAGGER=http://localhost:5000/swagger
-   if curl -fsS "$LOCAL_SWAGGER/index.html" >/dev/null; then
-     SWAGGER_BASE=$LOCAL_SWAGGER
-   fi
+   ./swagger-schema-check/fetch-swagger.sh
    ```
-2. **Fallback to environment BASE_URL when local fails.**
+   - Tries `http://localhost:5000/swagger` first.
+   - Falls back to `BASE_URL` from `src/environments/environment.ts` (if present) + `/swagger`.
+   - Saves to `docs/swagger/openapi.json` (relative to current working directory), overwriting if it exists.
+2. **Inspect the endpoint you’re touching.**
    ```bash
-   if [ -z "$SWAGGER_BASE" ]; then
-     BASE_URL=$(rg "const BASE_URL" -n src/environments/environment.ts | sed -E "s/.*'(.+)'/\\1/")
-     SWAGGER_BASE="$BASE_URL/swagger"
-   fi
-   ```
-3. **Download the document.**
-   ```bash
-   mkdir -p tmp/swagger
-   curl -fsS "$SWAGGER_BASE/v1/swagger.json" -o tmp/swagger/openapi.json
-   ```
-4. **Inspect the endpoint you’re touching.**
-   ```bash
-   jq '.paths["/api/ordens-servico"]' tmp/swagger/openapi.json
+   jq '.paths["/api/ordens-servico"]' docs/swagger/openapi.json
    ```
    Confirm verbs, query params, request bodies, and response schemas.
-5. **Cross-check DTOs/mocks/tests.**
+3. **Cross-check DTOs/mocks/tests.**
    - Update request/response interfaces, mock generators, and specs to match the schema.
-   - Optional: run `npx @redocly/openapi-cli lint tmp/swagger/openapi.json` for sanity.
-6. **Repeat whenever backend changes.** Don’t reuse stale snapshots.
+   - Optional: run `npx @redocly/openapi-cli lint docs/swagger/openapi.json` for sanity.
+4. **Repeat whenever backend changes.** Don’t reuse stale snapshots.
 
 ## Quick Reference
-| Step | Command / Action |
-|------|------------------|
-| Probe local | `curl -fsS http://localhost:5000/swagger/index.html` |
-| Fallback | Parse `BASE_URL` in `src/environments/environment.ts`, append `/swagger` |
-| Download | `curl -fsS "$SWAGGER_BASE/v1/swagger.json" -o tmp/swagger/openapi.json` |
-| Inspect path | `jq '.paths["/api/ordens-servico"]' tmp/swagger/openapi.json` |
-| Lint | `npx @redocly/openapi-cli lint tmp/swagger/openapi.json` |
+- Fetch: `./swagger-schema-check/fetch-swagger.sh`
+- Local first: `http://localhost:5000/swagger`
+- Fallback: `BASE_URL` from `src/environments/environment.ts` + `/swagger`
+- Output: `docs/swagger/openapi.json` (overwrites)
+- Inspect: `jq '.paths["/api/..."]' docs/swagger/openapi.json`
+- Lint: `npx @redocly/openapi-cli lint docs/swagger/openapi.json`
 
 ## Example Session
 ```bash
 cd /home/mendes/projetos/eugestor/frontend
-LOCAL_SWAGGER=http://localhost:5000/swagger
-if curl -fsS "$LOCAL_SWAGGER/index.html" >/dev/null; then
-  SWAGGER_BASE=$LOCAL_SWAGGER
-else
-  BASE_URL=$(rg "const BASE_URL" -n src/environments/environment.ts | sed -E "s/.*'(.+)'/\\1/")
-  SWAGGER_BASE="$BASE_URL/swagger"
-fi
-
-curl -fsS "$SWAGGER_BASE/v1/swagger.json" -o tmp/swagger/openapi.json
-jq '.paths["/api/ordens-servico"]' tmp/swagger/openapi.json
-npx @redocly/openapi-cli lint tmp/swagger/openapi.json
+./swagger-schema-check/fetch-swagger.sh
+jq '.paths["/api/ordens-servico"]' docs/swagger/openapi.json
+npx @redocly/openapi-cli lint docs/swagger/openapi.json
 ```
 
 ## Rationalization Table
