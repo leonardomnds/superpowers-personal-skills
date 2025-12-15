@@ -23,7 +23,7 @@ Lock every Angular spec to the TestBed so dependencies, modules, and DOM collabo
 6. **Type every jasmine spy and inject via helpers.** Sempre use `jasmine.createSpyObj<Type>` (quando necessário) e recupere mocks com `TestingUtils.inject<Service>() as jasmine.SpyObj<Service>` para manter tipos e DI explícitos.
 7. **Use TestingUtils para interação/injeção e modais.** Acesse serviços por `TestingUtils.inject`, dispare eventos com `TestingUtils.click`, substitua imports via `TestingUtils.replaceImport`, use `TestingUtils.mockNgbModalRef()`/`mockNgbOffcanvasRef()` para retornos de `NgbModal`/`NgbOffcanvas`.
 8. **Inputs e dados por teste, não helpers globais.** Configure inputs diretamente no Arrange de cada `it` com `fixture.componentRef.setInput(...)`, usando factories (`generateX`) e retornos tipados (`createApiResponseMock`) inline. Evite helpers como `setInputs` em `beforeEach` que escondem estado; cada teste deve declarar o que precisa.
-8. **Compile once per describe.** Use `beforeEach(async () => { await configure(); fixture = TestBed.createComponent(...); fixture.detectChanges(); })`. Let Angular's automatic teardown run, calling `TestBed.resetTestingModule()` only when you mutate global providers.
+9. **Compile once per describe.** Use `beforeEach(async () => { await configure(); fixture = TestBed.createComponent(...); fixture.detectChanges(); })`. Let Angular's automatic teardown run, calling `TestBed.resetTestingModule()` only when you mutate global providers.
 
 ## Implementation Example
 ```ts
@@ -37,6 +37,8 @@ import { TestingModule, TestingUtils } from '@testing/index';
 import { BillingSummaryComponent } from './billing-summary.component';
 import { BillingSummaryCardComponent } from '../ui/billing-summary-card.component';
 import { BillingService } from '../data/billing.service';
+import { generateBillingInput } from '../data/billing.mocks';
+import { createApiResponseMock } from '@data/common/api-response.mock';
 
 const initialState = { invoices: { summary: null } };
 
@@ -77,9 +79,18 @@ describe('BillingSummaryComponent', () => {
   });
 
   it('loads summary once OnInit and reacts to retry click', () => {
+    // Arrange
+    const input = generateBillingInput();
+    fixture.componentRef.setInput('input', input);
+    billingService.loadSummary.and.returnValue(of(createApiResponseMock(() => ({ total: 0 }))));
+    fixture.detectChanges();
+
+    // Act
     expect(billingService.loadSummary).toHaveBeenCalledTimes(1);
     const retryBtn = TestingUtils.getElementByCssName(fixture, '[data-test="retry"]');
     TestingUtils.click(retryBtn);
+
+    // Assert
     expect(billingService.loadSummary).toHaveBeenCalledTimes(2);
   });
 });
@@ -97,6 +108,7 @@ TestBed.overrideProvider(SignalBasedService, { useValue: metricsSpy });
 | Services | Prefer `MockProvider`/`MockProviders` e injete com `TestingUtils.inject<Service>() as jasmine.SpyObj<Service>`; configure `and.returnValue`/`and.callFake` nos métodos. Se ng-mocks falhar (signals), registre `jasmine.createSpyObj<Service>` via `providers`. |
 | HTTP collaborators | Import `HttpClientTestingModule`, grab `HttpTestingController`, `verify()` in `afterEach`. |
 | Router links/Navigation | Use `RouterTestingModule.withRoutes([])` or `RouterTestingHarness`, or replace directives via `TestingUtils.replaceImport`. |
+| Inputs | Sempre defina inputs no próprio teste via `fixture.componentRef.setInput(...)`, usando factories de dados; não esconda setup em helpers globais. |
 | TestingUtils helpers | Rely on `TestingUtils.inject`, `TestingUtils.click`, `TestingUtils.mockSelectProviders`, etc., instead of ad-hoc helpers. |
 
 ## Pressure Test (Scenario Verification)
@@ -128,6 +140,7 @@ TestBed.overrideProvider(SignalBasedService, { useValue: metricsSpy });
 - Overriding provider after `compileComponents` without `TestBed.resetTestingModule()` → order-sensitive leakage. Configure before compilation.
 - Mixing manual zone flushing with harness utilities → prefer `fixture.whenStable()` or harness `forceStabilize`.
 - Ignoring `TestingUtils` helpers → duplicate modal/select stubs drift from the canonical implementations and miss future fixes.
+- Criar helpers globais como `setInputs` em `beforeEach` que escondem o setup por teste → configure inputs explicitamente no Arrange de cada `it`.
 
 ## Deployment Notes
 Add this skill to your personal git repo (dotfiles or knowledge base) and share via PR if others face the same TestBed anti-patterns. Reference it in project CLAUDE.md so future agents load it before touching Angular specs.
