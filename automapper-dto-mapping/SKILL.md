@@ -1,5 +1,7 @@
+---
 name: automapper-dto-mapping
 description: Use when criando ou revisando AutoMapper Profiles para mapear DTOs e entidades em .NET - reforça mapear apenas diferenças de convenção (nome/tipo), evitar ForMember redundante e validar configuração para manter mapeamentos curtos, legíveis e seguros a renomes.
+---
 
 # AutoMapper DTO Mapping
 
@@ -19,6 +21,7 @@ Mantenha mapeamentos focados apenas em diferenças. O AutoMapper já resolve pro
 5) Ignore IDs/controle que não devem ser sobrescritos (ex.: .ForMember(d => d.Id, opt => opt.Ignore())).  
 6) Valide o profile: new MapperConfiguration(cfg => cfg.AddProfile<...>()).AssertConfigurationIsValid().  
 7) Cubra regras especiais com teste de configuração + teste de comportamento quando houver lógica em MapFrom.
+8) Em DTOs com Mapping(Profile) (interfaces IMapFrom/IMapTo), siga o mesmo: CreateMap limpo, só exceções com ForMember/ForPath.
 
 ## Exemplos Enxutos (do projeto)
 **IMapFrom** – `src/Application/OrdensServico/Queries/GetContato/GetContatoDaOrdemServicoDto.cs`  

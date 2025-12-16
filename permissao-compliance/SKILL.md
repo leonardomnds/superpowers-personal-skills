@@ -48,6 +48,12 @@ public record GerarLoteFaturasCommand : IBaseRequest<Unit>
 ```
 * Steps followed: generated new GUID, uppercased string, searched repo to confirm uniqueness, cited attribute in PR notes. *
 
+## Aplicação no EuGestor
+- `src/Application/OrdensServico/Commands/Agendar/AgendarOrdemServicoCommand.cs` já está decorado com `[Permissao("8DCDABB0-4F23-4824-8312-8956A87F5A4A")]`. Ao copiar comandos, gere um GUID novo; não reutilize este.
+- Busque requests sem atributo nos arquivos tocados: `rg "IBaseRequest|: IRequest" path/do/arquivo.cs` e verifique cada tipo (inclusive nested/partial).
+- Para checar duplicatas no repo: `rg -i "<GUID>" -n`. Para listar todos os GUIDs de permissão: `rg -o "[A-F0-9]{8}(-[A-F0-9]{4}){3}-[A-F0-9]{12}" src/Application`.
+- Aplique atributo no tipo concreto (command/query), não em base classes. DTOs e handlers não recebem `Permissao`.
+
 ## Rationalizations vs Reality
 | Excuse | Reality |
 |--------|---------|
