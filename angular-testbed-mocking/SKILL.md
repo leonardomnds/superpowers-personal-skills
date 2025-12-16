@@ -18,12 +18,13 @@ Lock every Angular spec to the TestBed so dependencies, modules, and DOM collabo
 1. **Map collaborators and warnings.** List modules, declarations, providers, and DOM elements the SUT touches, plus any template warnings. Include Angular Material/CDK modules, RouterTestingModule, HttpClientTestingModule, TranslateModule, etc.
 2. **Import real modules before mocking.** Try `TestingModule`, `ListagemTestingModule`, or the actual feature module and confirm warnings disappear. Only reach for `MockComponent`/`MockDirective` if importing the module is impossible or wasteful—never fix warnings with schemas.
 3. **Centralize TestBed config.** Wrap defaults in `createTestingModule(overrides?: Partial<TestModuleMetadata>)` and expose helpers via `TestingUtils` so specs share the same imports/providers and overrides stay explicit.
-4. **Mock declarations with ng-mocks.** Use `MockComponent`, `MockDirective`, `MockPipe`, `MockComponents`, etc., to satisfy template dependencies while keeping declarations deterministic and harness-friendly.
-5. **Mock services via providers, not properties.** Prefer `MockProvider`/`MockProviders` as the default so DI and lifecycle hooks see the same stub. Se o serviço expõe signals/computed como métodos, use `jasmine.createSpyObj<Service>(['metodoA', 'metodoB'], { metodoA: valorOuSignal })` e registre via `providers`. Só caia para stub/manual quando ng-mocks não conseguir embrulhar o serviço (ex.: signals complexos).
-6. **Type every jasmine spy and inject via helpers.** Sempre use `jasmine.createSpyObj<Type>` (quando necessário) e recupere mocks com `TestingUtils.inject<Service>() as jasmine.SpyObj<Service>` para manter tipos e DI explícitos.
+4. **Mock declarations com ng-mocks nos imports.** Use `MockComponent`/`MockDirective`/`MockPipe`/`MockComponents` diretamente no array `imports` (incluindo standalones) para satisfazer dependências de template de forma determinística; prefira isso a `overrideComponent`.
+5. **Mock services via providers, não propriedades.** Registre serviços com `MockProvider`/`MockProviders` para que DI e lifecycle vejam o stub; recupere-os com `TestingUtils.inject<Service>()` após `compileComponents`. Evite montar objetos manuais (ex.: signals artificiais) fora do TestBed.
+6. **Type every jasmine spy and inject via helpers.** Sempre use `jasmine.createSpyObj<Type>` (quando necessário) e injete com `TestingUtils.inject<Service>() as jasmine.SpyObj<Service>` para manter tipos e DI explícitos.
 7. **Use TestingUtils para interação/injeção e modais.** Acesse serviços por `TestingUtils.inject`, dispare eventos com `TestingUtils.click`, substitua imports via `TestingUtils.replaceImport`, use `TestingUtils.mockNgbModalRef()`/`mockNgbOffcanvasRef()` para retornos de `NgbModal`/`NgbOffcanvas`.
-8. **Inputs e dados por teste, não helpers globais.** Configure inputs diretamente no Arrange de cada `it` com `fixture.componentRef.setInput(...)`, usando factories (`generateX`) e retornos tipados (`createApiResponseMock`) inline. Evite helpers como `setInputs` em `beforeEach` que escondem estado; cada teste deve declarar o que precisa.
-9. **Compile once per describe.** Use `beforeEach(async () => { await configure(); fixture = TestBed.createComponent(...); fixture.detectChanges(); })`. Let Angular's automatic teardown run, calling `TestBed.resetTestingModule()` only when you mutate global providers.
+8. **Inputs e dados por teste, não helpers globais.** Configure inputs diretamente no Arrange de cada `it` com `fixture.componentRef.setInput(...)`, usando factories (`generateX`), helpers do projeto (`createApiResponseListaMock`/`createApiResponseMock`) e `faker` para respostas realistas. Evite helpers como `setInputs` em `beforeEach` que escondem estado; cada teste deve declarar o que precisa.
+9. **Controle o timing do `detectChanges`.** Se o `OnInit` dispara chamadas externas, deixe `fixture.detectChanges()` dentro do próprio teste para preparar stubs/inputs antes; só mova para o `beforeEach` quando o estado inicial for igual em todos os casos.
+10. **Compile once per describe.** Use `beforeEach(async () => { await configure(); fixture = TestBed.createComponent(...); /* detectChanges opcional aqui */ })`. Let Angular's automatic teardown run, calling `TestBed.resetTestingModule()` only when you mutate global providers.
 
 ## Implementation Example
 ```ts
@@ -106,6 +107,7 @@ TestBed.overrideProvider(SignalBasedService, { useValue: metricsSpy });
 | Unknown element/attribute warnings | Import the real module (Material/CDK, feature modules, or shared `TestingModule`) before considering mocks—never silence with schemas. |
 | Template-only collaborators | Declare `MockComponent/MockDirective/MockPipe` from `ng-mocks` so the DOM stays deterministic without pulling the full module. |
 | Services | Prefer `MockProvider`/`MockProviders` e injete com `TestingUtils.inject<Service>() as jasmine.SpyObj<Service>`; configure `and.returnValue`/`and.callFake` nos métodos. Se ng-mocks falhar (signals), registre `jasmine.createSpyObj<Service>` via `providers`. |
+| Standalone children | Use `MockComponents(...)` direto no `imports` para mockar filhos standalones sem `overrideComponent`. |
 | HTTP collaborators | Import `HttpClientTestingModule`, grab `HttpTestingController`, `verify()` in `afterEach`. |
 | Router links/Navigation | Use `RouterTestingModule.withRoutes([])` or `RouterTestingHarness`, or replace directives via `TestingUtils.replaceImport`. |
 | Inputs | Sempre defina inputs no próprio teste via `fixture.componentRef.setInput(...)`, usando factories de dados; não esconda setup em helpers globais. |
@@ -132,6 +134,7 @@ TestBed.overrideProvider(SignalBasedService, { useValue: metricsSpy });
 - Calling `TestBed.inject` after `fixture.detectChanges()` revealed a failure you are trying to mask.
 - Using shared mutable singletons (e.g., `const fakeService = ...; providers: [{provide, useValue: fakeService}]` reused across tests) without resetting spies.
 - Reaching for manual mocks before checking whether importing `TestingModule` (or the real feature module) removes the warning.
+- Montar objetos de serviço manualmente (incluindo signals fake) em vez de `MockProviders` + `TestingUtils.inject` após `compileComponents`.
 - Creating `jasmine.createSpyObj` without `<Type>` generics or method lists.
 
 ## Common Mistakes
