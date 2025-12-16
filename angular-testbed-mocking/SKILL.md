@@ -22,7 +22,7 @@ Lock every Angular spec to the TestBed so dependencies, modules, and DOM collabo
 5. **Mock services via providers, não propriedades.** Registre serviços com `MockProvider`/`MockProviders` para que DI e lifecycle vejam o stub; recupere-os com `TestingUtils.inject<Service>()` após `compileComponents`. Evite montar objetos manuais (ex.: signals artificiais) fora do TestBed.
 6. **Type every jasmine spy and inject via helpers.** Sempre use `jasmine.createSpyObj<Type>` (quando necessário) e injete com `TestingUtils.inject<Service>() as jasmine.SpyObj<Service>` para manter tipos e DI explícitos.
 7. **Use TestingUtils para interação/injeção e modais.** Acesse serviços por `TestingUtils.inject`, dispare eventos com `TestingUtils.click`, substitua imports via `TestingUtils.replaceImport`, use `TestingUtils.mockNgbModalRef()`/`mockNgbOffcanvasRef()` para retornos de `NgbModal`/`NgbOffcanvas`.
-8. **Inputs e dados por teste, não helpers globais.** Configure inputs diretamente no Arrange de cada `it` com `fixture.componentRef.setInput(...)`, usando factories (`generateX`), helpers do projeto (`createApiResponseListaMock`/`createApiResponseMock`) e `faker` para respostas realistas. Evite helpers como `setInputs` em `beforeEach` que escondem estado; cada teste deve declarar o que precisa.
+8. **Inputs e dados por teste, não helpers globais.** Configure inputs diretamente no Arrange de cada `it` com `fixture.componentRef.setInput(...)`, usando factories/mocks existentes (`generateX` como `generatePessoaContatoDto`), helpers do projeto (`createApiResponseListaMock`/`createApiResponseMock`) e `faker` para respostas realistas. Evite helpers como `setInputs` (ou variantes) em `beforeEach` que escondem estado; cada teste deve declarar explicitamente os inputs que usa.
 9. **Controle o timing do `detectChanges`.** Se o `OnInit` dispara chamadas externas, deixe `fixture.detectChanges()` dentro do próprio teste para preparar stubs/inputs antes; só mova para o `beforeEach` quando o estado inicial for igual em todos os casos.
 10. **Compile once per describe.** Use `beforeEach(async () => { await configure(); fixture = TestBed.createComponent(...); /* detectChanges opcional aqui */ })`. Let Angular's automatic teardown run, calling `TestBed.resetTestingModule()` only when you mutate global providers.
 
@@ -110,7 +110,7 @@ TestBed.overrideProvider(SignalBasedService, { useValue: metricsSpy });
 | Standalone children | Use `MockComponents(...)` direto no `imports` para mockar filhos standalones sem `overrideComponent`. |
 | HTTP collaborators | Import `HttpClientTestingModule`, grab `HttpTestingController`, `verify()` in `afterEach`. |
 | Router links/Navigation | Use `RouterTestingModule.withRoutes([])` or `RouterTestingHarness`, or replace directives via `TestingUtils.replaceImport`. |
-| Inputs | Sempre defina inputs no próprio teste via `fixture.componentRef.setInput(...)`, usando factories de dados; não esconda setup em helpers globais. |
+| Inputs | Sempre defina inputs no próprio teste via `fixture.componentRef.setInput(...)`, usando factories/mocks existentes; não crie helpers globais como `setInputs`. |
 | TestingUtils helpers | Rely on `TestingUtils.inject`, `TestingUtils.click`, `TestingUtils.mockSelectProviders`, etc., instead of ad-hoc helpers. |
 
 ## Pressure Test (Scenario Verification)
@@ -135,6 +135,7 @@ TestBed.overrideProvider(SignalBasedService, { useValue: metricsSpy });
 - Using shared mutable singletons (e.g., `const fakeService = ...; providers: [{provide, useValue: fakeService}]` reused across tests) without resetting spies.
 - Reaching for manual mocks before checking whether importing `TestingModule` (or the real feature module) removes the warning.
 - Montar objetos de serviço manualmente (incluindo signals fake) em vez de `MockProviders` + `TestingUtils.inject` após `compileComponents`.
+- Criar helpers genéricos de inputs (ex.: `setInputs`) ou bases de DTO manuais no spec em vez de usar mocks/factories existentes para cada teste.
 - Creating `jasmine.createSpyObj` without `<Type>` generics or method lists.
 
 ## Common Mistakes
