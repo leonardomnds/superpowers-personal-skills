@@ -35,6 +35,16 @@ If you already typed code before completing the checklist, delete those edits, d
 | Analyzer turned off locally? | `Directory.Build.props` (`RunAnalyzersDuringBuild`, `AdditionalFiles`) |
 | Test projects needing special props | `Directory.Build.props` (look at `IsTest`/`IsUnitTest` blocks) |
 
+## EuGestor Backend Pattern Reminders (apply every time)
+- Commands e handlers no mesmo arquivo; Validator separado.
+- Entrada de domínio deve ser um Model agregado (evite passar vários parâmetros soltos).
+- Validação vem primeiro nas ações de agregados: `Guard.NotNull` seguido de `Guard.Enforce(...)` antes de acessar coleções/First; trate ausência de agregados/roots explicitamente.
+- Prefira primary constructor em eventos/entidades/helper records; remova usings não usados e evite linha em branco no final do arquivo.
+- Não assuma que itens existem em coleções: valide antes de usar LINQ/First/FirstOrDefault.
+- Nunca deixar quebra de linha extra ao final dos arquivos (`\n` terminal proibido).
+- Não deixar usings sem uso (incluindo global usings).
+- Eventos: passar o mínimo de dados possível. Não envie UserId/nome em eventos se o Handler pode obter via SessaoService; evite repassar Id de root/aggregate quando o agregado pode ser carregado e expõe seu Id.
+
 ## Example Refresh (Before Editing)
 ```text
 1. open .editorconfig (root) → note indentation 4 spaces, newline rules.
